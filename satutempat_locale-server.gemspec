@@ -1,15 +1,15 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'satutempat_locale/version'
+require 'satutempat_locale/server/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'satutempat_locale'
-  spec.version       = SatutempatLocale::VERSION
+  spec.name          = 'satutempat_locale-server'
+  spec.version       = SatutempatLocale::Server::VERSION
   spec.authors       = ['Teja Sophista V.R.']
   spec.email         = ['tejanium@yahoo.com']
-  spec.description   = 'SatuTempat Locale Helper'
-  spec.summary       = 'SatuTempat Locale Helper'
+  spec.description   = 'SatuTempat Locale Server'
+  spec.summary       = 'SatuTempat Locale Server'
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }

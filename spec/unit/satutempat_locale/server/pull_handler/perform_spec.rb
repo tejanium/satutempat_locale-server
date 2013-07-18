@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SatutempatLocale::PullHandler do
+describe SatutempatLocale::Server::PullHandler do
   before :each do
     Time.stub now: 100
   end
@@ -17,7 +17,7 @@ describe SatutempatLocale::PullHandler do
 
       it 'tar folder' do
         lambda{
-          SatutempatLocale::PullHandler.new('spec/fixtures').perform!
+          SatutempatLocale::Server::PullHandler.new('spec/fixtures').perform!
         }.should change { File.exist? '100.tar' }.from(false).to(true)
       end
 
@@ -27,7 +27,7 @@ describe SatutempatLocale::PullHandler do
         end
 
         it 'have extra file, marker' do
-          SatutempatLocale::PullHandler.new('spec/fixtures').perform!
+          SatutempatLocale::Server::PullHandler.new('spec/fixtures').perform!
 
           Archive::Tar::Minitar.unpack('100.tar', 'unpacked')
 
@@ -40,7 +40,7 @@ describe SatutempatLocale::PullHandler do
         it 'extra file should contain time' do
           stub_global_marker 100
 
-          SatutempatLocale::PullHandler.new('spec/fixtures').perform!
+          SatutempatLocale::Server::PullHandler.new('spec/fixtures').perform!
 
           Archive::Tar::Minitar.unpack('100.tar', 'unpacked')
 
@@ -48,7 +48,7 @@ describe SatutempatLocale::PullHandler do
         end
 
         it 'have proper file' do
-          SatutempatLocale::PullHandler.new('spec/fixtures').perform!
+          SatutempatLocale::Server::PullHandler.new('spec/fixtures').perform!
 
           Archive::Tar::Minitar.unpack('100.tar', 'unpacked')
 
@@ -59,7 +59,7 @@ describe SatutempatLocale::PullHandler do
 
     it 'raise error when folder not found' do
       lambda{
-        SatutempatLocale::PullHandler.new('invalid/folder').perform!
+        SatutempatLocale::Server::PullHandler.new('invalid/folder').perform!
       }.should raise_error PullRejectedError
     end
   end

@@ -1,4 +1,4 @@
-require 'satutempat_locale'
+require 'satutempat_locale/server'
 require 'database_cleaner'
 
 RSpec.configure do |config|
@@ -15,7 +15,7 @@ RSpec.configure do |config|
     global_marker = mock 'global_marker'
     global_marker.stub last_update: time
     global_marker.stub set: true
-    SatutempatLocale::GlobalMarker.stub first: global_marker
-    SatutempatLocale::GlobalMarker.stub create: true
+    SatutempatLocale::Server::GlobalMarker.stub first: global_marker
+    SatutempatLocale::Server::GlobalMarker.stub create: true
   end
 end
