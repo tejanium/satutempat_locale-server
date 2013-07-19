@@ -41,6 +41,8 @@ module SatutempatLocale
         end
 
         def can_perform?
+          return true if @client_last_update == -1
+
           GlobalMarker.last_update >= @client_last_update
         end
     end

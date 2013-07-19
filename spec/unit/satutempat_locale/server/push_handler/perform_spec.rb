@@ -3,6 +3,14 @@ require 'spec_helper'
 describe SatutempatLocale::Server::PushHandler do
   describe '#perform!' do
     context 'accepted' do
+      it 'client update is -1' do
+        stub_global_marker 20
+
+        lambda{
+          SatutempatLocale::Server::PushHandler.new(-1, "spec/tar/fixtures.tar").perform!
+        }.should change { SatutempatLocale::Server::Storage.count }.from(0).to(10)
+      end
+
       it 'client update is more than server\'s' do
         stub_global_marker 20
 
