@@ -15,6 +15,10 @@ module SatutempatLocale
         pack_folder
       end
 
+      def file_path
+        @file_path
+      end
+
       private
         def create_marker
           File.open(@last_update_file, "w") do |file|
@@ -23,17 +27,18 @@ module SatutempatLocale
         end
 
         def pack_folder
-          File.open(file_name, 'wb') do |tar|
+          Tempfile.open(file_name) do |tar|
             Minitar.pack(@folder_path, tar)
+            @file_path = tar.path
           end
+        end
+
+        def file_name
+          @file_name ||= "#{ Time.now.to_i }.tar"
         end
 
         def can_perform?
           File.directory? @folder_path
-        end
-
-        def file_name
-          "#{ Time.now.to_i }.tar"
         end
 
         def normalize_folder_path folder_path
