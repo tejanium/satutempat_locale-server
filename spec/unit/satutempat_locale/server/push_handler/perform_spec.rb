@@ -12,10 +12,10 @@ describe SatutempatLocale::Server::PushHandler do
       end
 
       it 'client update is more than server\'s' do
-        stub_global_marker 20
+        stub_global_marker 10
 
         lambda{
-          SatutempatLocale::Server::PushHandler.new(10, "spec/tar/fixtures.tar").perform!
+          SatutempatLocale::Server::PushHandler.new(20, "spec/tar/fixtures.tar").perform!
         }.should change { SatutempatLocale::Server::Storage.count }.from(0).to(10)
       end
 
@@ -28,12 +28,16 @@ describe SatutempatLocale::Server::PushHandler do
       end
 
       it 'create global marker' do
+        Time.stub now: Time.at(10)
+
         lambda{
           SatutempatLocale::Server::PushHandler.new(10, "spec/tar/fixtures.tar").perform!
         }.should change { SatutempatLocale::Server::GlobalMarker.count }.from(0).to(1)
       end
 
       it 'update global marker but do not create new marker' do
+        Time.stub now: Time.at(10)
+
         SatutempatLocale::Server::PushHandler.new(10, "spec/tar/fixtures.tar").perform!
 
         lambda{
@@ -54,10 +58,10 @@ describe SatutempatLocale::Server::PushHandler do
 
     context 'rejected' do
       it 'client update is less than server\'s' do
-        stub_global_marker 10
+        stub_global_marker 20
 
         lambda{
-          SatutempatLocale::Server::PushHandler.new(20, "spec/tar/fixtures.tar").perform!
+          SatutempatLocale::Server::PushHandler.new(10, "spec/tar/fixtures.tar").perform!
         }.should raise_error PushRejectedError
       end
     end
