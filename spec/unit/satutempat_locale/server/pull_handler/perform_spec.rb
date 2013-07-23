@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SatutempatLocale::Server::PullHandler do
   before :each do
-    Time.stub now: 100
+    Time.stub now: Time.at(100)
   end
 
   def basename
@@ -11,14 +11,13 @@ describe SatutempatLocale::Server::PullHandler do
 
   describe '#perform!' do
     context 'tar' do
-      after :each do
-        File.delete '100.tar'
+      let :pull_handler do
+        SatutempatLocale::Server::PullHandler.new('spec/fixtures')
       end
 
       it 'tar folder' do
-        lambda{
-          SatutempatLocale::Server::PullHandler.new('spec/fixtures').perform!
-        }.should change { File.exist? '100.tar' }.from(false).to(true)
+        pull_handler.perform!
+        File.should be_exist pull_handler.file_path
       end
 
       context 'folder content' do
@@ -27,9 +26,9 @@ describe SatutempatLocale::Server::PullHandler do
         end
 
         it 'have extra file, marker' do
-          SatutempatLocale::Server::PullHandler.new('spec/fixtures').perform!
+          pull_handler.perform!
 
-          Archive::Tar::Minitar.unpack('100.tar', 'unpacked')
+          Archive::Tar::Minitar.unpack(pull_handler.file_path, 'unpacked')
 
           ls = Dir['unpacked/spec/fixtures/.*']
 
@@ -40,17 +39,17 @@ describe SatutempatLocale::Server::PullHandler do
         it 'extra file should contain time' do
           stub_global_marker 100
 
-          SatutempatLocale::Server::PullHandler.new('spec/fixtures').perform!
+          pull_handler.perform!
 
-          Archive::Tar::Minitar.unpack('100.tar', 'unpacked')
+          Archive::Tar::Minitar.unpack(pull_handler.file_path, 'unpacked')
 
           File.read('unpacked/spec/fixtures/.last_update').should eql '100'
         end
 
         it 'have proper file' do
-          SatutempatLocale::Server::PullHandler.new('spec/fixtures').perform!
+          pull_handler.perform!
 
-          Archive::Tar::Minitar.unpack('100.tar', 'unpacked')
+          Archive::Tar::Minitar.unpack(pull_handler.file_path, 'unpacked')
 
           Dir['unpacked/spec/fixtures/*'].map(&basename).should eql Dir['spec/fixtures/*'].map(&basename)
         end

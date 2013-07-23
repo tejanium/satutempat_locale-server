@@ -1,3 +1,4 @@
+require 'tempfile'
 require 'mongoid'
 require 'zlib'
 require 'archive/tar/minitar'
