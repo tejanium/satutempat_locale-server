@@ -26,6 +26,8 @@ module SatutempatLocale
       end
 
       def self.export file_path, file_destination=file_path
+        FileUtils.mkdir_p File.dirname file_destination
+
         dump to_hash(file_path), file_destination
       end
 
@@ -35,6 +37,14 @@ module SatutempatLocale
 
       def self.to_hash file_path=/.*/
         where(file_path: file_path).to_a.map(&:to_hash).inject(&:deep_merge)
+      end
+
+      def self.export_each folder=nil
+        proper_folder = "#{ folder }/" if folder
+
+        all.distinct(:file_path).each do |file_path|
+          export file_path, "#{ proper_folder }#{ file_path }"
+        end
       end
 
       def self.search params={}

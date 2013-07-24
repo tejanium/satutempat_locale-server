@@ -5,7 +5,7 @@ describe SatutempatLocale::Server::Storage do
     DUMPSTER = 'spec/dump.yml'
 
     after :each do
-      File.delete DUMPSTER
+      File.delete DUMPSTER if File.exist? DUMPSTER
     end
 
     context 'three level' do
@@ -17,6 +17,14 @@ describe SatutempatLocale::Server::Storage do
         SatutempatLocale::Server::Storage.export 'spec/fixtures/three_level.yml', DUMPSTER
 
         YAML.load_file(DUMPSTER).should eq YAML.load_file('spec/fixtures/three_level.yml')
+      end
+
+      it 'export all data to some folder that does not exist' do
+        SatutempatLocale::Server::Storage.export 'spec/fixtures/three_level.yml', 'dumpster/dump.yml'
+
+        YAML.load_file('dumpster/dump.yml').should eq YAML.load_file('spec/fixtures/three_level.yml')
+
+        FileUtils.rm_rf 'dumpster'
       end
     end
 
