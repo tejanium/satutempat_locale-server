@@ -27,12 +27,16 @@ module SatutempatLocale
         end
 
         def get_files
-          @files = Dir["#{ @unpack_folder }/**/*.yml"]
+          in_unpack_folder do
+            @files = Dir["**/*.yml"]
+          end
         end
 
         def import_files
           @files.each do |file|
-            Storage.import file
+            in_unpack_folder do
+              Storage.import file
+            end
           end
         end
 
@@ -44,6 +48,12 @@ module SatutempatLocale
           return true if @client_last_update == -1
 
           GlobalMarker.last_update <= @client_last_update
+        end
+
+        def in_unpack_folder
+          Dir.chdir @unpack_folder do
+            yield
+          end
         end
     end
   end

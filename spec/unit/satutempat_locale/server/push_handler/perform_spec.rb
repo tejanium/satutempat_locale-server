@@ -65,5 +65,15 @@ describe SatutempatLocale::Server::PushHandler do
         }.should raise_error PushRejectedError
       end
     end
+
+    context 'data' do
+      it 'should not introduce tar path in file_path' do
+        Time.stub now: Time.at(10)
+
+        SatutempatLocale::Server::PushHandler.new(10, "spec/tar/fixtures.tar").perform!
+
+        SatutempatLocale::Server::Storage.first.file_path[/\A10/].should be_nil
+      end
+    end
   end
 end
