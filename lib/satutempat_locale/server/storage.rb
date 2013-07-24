@@ -3,6 +3,8 @@ module SatutempatLocale
     class Storage
       include ::Mongoid::Document
 
+      after_save :update_global_marker
+
       with_options type: String do |string|
         string.field :key
         string.field :value
@@ -65,6 +67,10 @@ module SatutempatLocale
           inversed_keys.inject(hash) do |memo, namespaced_key|
             { namespaced_key => memo }
           end
+        end
+
+        def update_global_marker
+          GlobalMarker.update_marker
         end
     end
   end
