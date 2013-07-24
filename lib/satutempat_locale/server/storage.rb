@@ -11,6 +11,16 @@ module SatutempatLocale
         string.field :file_path
       end
 
+      scope :by_key, ->(key) do
+        return scoped unless key
+        where(key: /#{ key }/)
+      end
+
+      scope :by_value, ->(value) do
+        return scoped unless value
+        where(value: /#{ value }/)
+      end
+
       def self.import file_path
         create_from_hash YAML.load_file(file_path), nil, file_path
       end
@@ -25,6 +35,12 @@ module SatutempatLocale
 
       def self.to_hash file_path=/.*/
         where(file_path: file_path).to_a.map(&:to_hash).inject(&:deep_merge)
+      end
+
+      def self.search params={}
+        params = {} if params.nil?
+
+        by_key(params[:key]).by_value(params[:value])
       end
 
       private
