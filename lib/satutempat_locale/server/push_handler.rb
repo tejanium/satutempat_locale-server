@@ -10,10 +10,15 @@ module SatutempatLocale
       def perform!
         raise PushRejectedError unless can_perform?
 
+        puts 'Unpack files...'
         unpack_file
+        puts 'Get files...'
         get_files
+        puts 'Import files to database...'
         import_files
+        puts 'Cleanup...'
         delete_folder
+        puts 'Done.'
         update_global_marker
       end
 

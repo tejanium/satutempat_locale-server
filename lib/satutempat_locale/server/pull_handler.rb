@@ -10,9 +10,13 @@ module SatutempatLocale
 
       def perform!
         raise PullRejectedError unless can_perform?
-
+        puts 'Export from database...'
+        export_each
+        puts 'Create marker...'
         create_marker
+        puts 'Pack folder...'
         pack_folder
+        puts 'Done.'
       end
 
       def file_path
@@ -20,6 +24,10 @@ module SatutempatLocale
       end
 
       private
+        def export_each
+          Storage.export_each
+        end
+
         def create_marker
           File.open(@last_update_file, "w") do |file|
             file.write GlobalMarker.last_update
