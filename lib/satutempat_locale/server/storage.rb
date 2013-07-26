@@ -56,6 +56,7 @@ module SatutempatLocale
       private
         def self.dump hash, file_destination
           File.open(file_destination, 'w') do |out|
+            YAML::ENGINE.yamler = 'syck'
             YAML.dump hash, out
           end
         end
