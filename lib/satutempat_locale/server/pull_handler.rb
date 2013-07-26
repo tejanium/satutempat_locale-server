@@ -25,7 +25,7 @@ module SatutempatLocale
 
       private
         def export_each
-          Storage.export_each
+          Storage.export_each SatutempatLocale::Server.configuration.locale_path
         end
 
         def create_marker
