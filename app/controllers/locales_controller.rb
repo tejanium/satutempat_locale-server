@@ -19,7 +19,7 @@ class LocalesController < ActionController::Base
     end
 
     def pull_handler
-      @pull_handler ||= SatutempatLocale::Server::PullHandler.new 'config/locales'
+      @pull_handler ||= SatutempatLocale::Server::PullHandler.new SatutempatLocale::Server.configuration.locale_path
     end
 
     def push_handler
