@@ -9,9 +9,10 @@ module SatutempatLocale
       end
 
       def perform!
-        raise PullRejectedError unless can_perform?
         puts 'Export from database...'
         export_each
+
+        raise PullRejectedError unless can_perform?
         puts 'Create marker...'
         create_marker
         puts 'Pack folder...'
