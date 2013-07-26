@@ -37,8 +37,11 @@ module SatutempatLocale
 
         def pack_folder
           Tempfile.open(file_name) do |tar|
-            Minitar.pack(@folder_path, tar)
             @file_path = tar.path
+
+            in_folder_path do
+              Minitar.pack('.', tar)
+            end
           end
         end
 
@@ -52,6 +55,12 @@ module SatutempatLocale
 
         def normalize_folder_path folder_path
           folder_path.gsub /\/\z/, ''
+        end
+
+        def in_folder_path
+          Dir.chdir @folder_path do
+            yield
+          end
         end
     end
   end
